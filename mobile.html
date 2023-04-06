@@ -38,8 +38,13 @@
             document.getElementById('checkRedirect').checked = true;
             var hrefRedirect = getCookie('checkRedirect');
             if(hrefRedirect){
-                setTimeout(set_location, 5000, hrefRedirect);
+                //setTimeout(set_location, 5000, hrefRedirect);
                 //set_location(hrefRedirect)
+                if( /zzap.page.link/i.test(hrefRedirect) ){
+                    document.getElementById('checkRedirect').click();
+                }else{
+                    set_location(hrefRedirect)
+                }
             }
             if (!isMobile()){
                 document.getElementById('mobileLink').classList.add("disable_link");
