@@ -41,7 +41,8 @@
                 //setTimeout(set_location, 5000, hrefRedirect);
                 //set_location(hrefRedirect)
                 if( /zzap\.page\.link/i.test(hrefRedirect) ){
-                    document.getElementById('mobileLink').click();
+                    
+                    setTimeout(()=>{ document.getElementById('mobileLink').click(); }, 5000);
                 }else{
                     set_location(hrefRedirect)
                 }
