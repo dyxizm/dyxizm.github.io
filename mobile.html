@@ -42,11 +42,11 @@
                 //set_location(hrefRedirect)
                 if( /zzap\.page\.link/i.test(hrefRedirect) ){
                     //document.getElementById('mobileLink').click();
-                    try {
-                        document.location = 'zzap://app';
-                    } catch(err) {
+                    document.location = 'zzap://app';
+                    setTimeout(()=>{
                         location.href = hrefRedirect
-                    }
+                    }, 500)
+
                 }else{
                     location.href = hrefRedirect
                 }
