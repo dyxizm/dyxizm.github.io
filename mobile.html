@@ -38,7 +38,8 @@
             document.getElementById('checkRedirect').checked = true;
             var hrefRedirect = getCookie('checkRedirect');
             if(hrefRedirect){
-                set_location(hrefRedirect)
+                settimeout(set_location, 5000, hrefRedirect)
+                //set_location(hrefRedirect)
             }
             if (!isMobile()){
                 document.getElementById('mobileLink').classList.add("disable_link");
