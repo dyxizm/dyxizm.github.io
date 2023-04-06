@@ -41,12 +41,14 @@
                 //setTimeout(set_location, 5000, hrefRedirect);
                 //set_location(hrefRedirect)
                 if( /zzap\.page\.link/i.test(hrefRedirect) ){
-                    
-                    setTimeout(()=>{ 
-                        document.getElementById('mobileLink').dispatchEvent( new Event( 'click', { bubbles: true } ))
-                    }, 5000);
+                    //document.getElementById('mobileLink').click();
+                    try {
+                        document.location = 'zzap://app';
+                    } catch(err) {
+                        location.href = hrefRedirect
+                    }
                 }else{
-                    set_location(hrefRedirect)
+                    location.href = hrefRedirect
                 }
             }
             if (!isMobile()){
