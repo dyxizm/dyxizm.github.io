@@ -37,16 +37,19 @@
             //document.getElementById('checkRedirect').checked = getCookie('checkRedirect')==1? true : false;
             document.getElementById('checkRedirect').checked = true;
             var hrefRedirect = getCookie('checkRedirect');
+            var timeout;
             if(hrefRedirect){
-                //setTimeout(set_location, 5000, hrefRedirect);
-                //set_location(hrefRedirect)
                 if( /zzap\.page\.link/i.test(hrefRedirect) ){
-                    //document.getElementById('mobileLink').click();
-                    document.location = 'zzap://app';
-                    setTimeout(()=>{
-                        location.href = hrefRedirect
-                    }, 500)
+                    try {
+                        location.href = 'zzap://app';
+                        timeout = setTimeout(()=>{
+                            location.href = hrefRedirect
+                        }, 5000)
 
+                    } catch(err) {
+                        clearInterval(timeout);
+                        location.href = hrefRedirect
+                    }
                 }else{
                     location.href = hrefRedirect
                 }
