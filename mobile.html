@@ -40,16 +40,11 @@
             var timeout;
             if(hrefRedirect){
                 if( /zzap\.page\.link/i.test(hrefRedirect) ){
-                    try {
-                        location.href = 'zzap://app';
-                        /*timeout = setTimeout(()=>{
-                            location.href = hrefRedirect
-                        }, 1000)*/
-
-                    } catch(err) {
-                        //clearInterval(timeout);
-                        //location.href = hrefRedirect
-                    }
+                   location.href = 'zzap://app';
+                   timeout = setTimeout(()=>{
+                     location.href = hrefRedirect
+                   }, 1000)
+}
                 }else{
                     location.href = hrefRedirect
                 }
