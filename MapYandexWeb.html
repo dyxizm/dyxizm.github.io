@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--
+        Set your own API-key. Testing key is not valid for other web-sites and services.
+        Get your API-key on the Developer Dashboard: https://developer.tech.yandex.ru/keys/
+    -->
+    <script src="https://api-maps.yandex.ru/2.1/?lang=en_RU&amp;apikey=66cc9c07-f382-4a9c-ba56-37abb984f971" type="text/javascript"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+	<style>
+        html, body, #map {
+            width: 100%; height: 100%; padding: 0; margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    var myMap,
+        clusterer,
+        MyIconContentLayout,
+        getPointData = function (data = {}) {
+            return {
+                ...data
+            };
+        },
+        getPointOptions = function (data) {
+            return {
+                iconLayout: 'default#imageWithContent',
+                iconContentLayout: MyIconContentLayout,
+                iconImageSize: [72, 36],
+                iconImageHref: false,
+                //preset: 'islands#blueIcon',
+                hasBalloon: false,
+                //iconColor: data.iconColor,
+            };
+        },
+        geoObjects = [];
+
+
+    window.addEventListener("message", function (event) {
+        //alert("event.data");
+        const data = JSON.parse(event.data);
+        if(data.points){
+
+        }
+        if(data.points){
+
+            ymaps.ready(function () {
+                // Создаём макет содержимого.
+                MyIconContentLayout = ymaps.templateLayoutFactory.createClass(
+                    `<div style="position:relative;top:-36px;color: #FFFFFF;width:72px;height:36px;text-align:center;width:72px;">
+                        <div style="position:absolute;background-color:$[properties.iconColor];margin:auto;left:26px;top:18px;width:14px;height:14px;transform:rotate(45deg);z-index:-1"></div>
+                        <div style="background-color:$[properties.iconColor];color: #FFFFFF;width:72px;height:29px;padding-bottom:3;text-align:center;border-radius:4px;">
+                            <span style="font-family:'Roboto',sans-serif;font-weight:bold;line-height:29px;font-size:14px">$[properties.price] ₽</span>
+                        </div>                        
+                    </div>`
+                );
+
+                myMap = new ymaps.Map('map', {
+                        center: [55.751574, 37.573856],
+                        zoom: 9,
+                    }, {
+                        searchControlProvider: 'yandex#search',
+                    }),
+                clusterer = new ymaps.Clusterer({
+                    //preset: 'islands#blueClusterIcons',
+                    // The layout of the pieChart cluster placemark.
+                    clusterIconLayout: 'default#pieChart',
+                    // Radius of the diagram, in pixels.
+                    clusterIconPieChartRadius: 16,
+                    // The radius of the central part of the layout.
+                    clusterIconPieChartCoreRadius: 13,
+                    // Width of the sector dividing lines and diagram outline.
+                    clusterIconPieChartStrokeWidth: 0,
+                    clusterHideIconOnBalloonOpen: false,
+                    geoObjectHideIconOnBalloonOpen: false,
+                    gridSize:64,
+                    zoomMargin:64,
+                });
+
+                for(var i = 0, len = data.points.length; i < len; i++) {
+                    geoObjects[i] = new ymaps.Placemark(data.points[i].point, getPointData(data.points[i].data), getPointOptions(data.points[i].data));
+                }
+
+                clusterer.add(geoObjects);
+                myMap.geoObjects.add(clusterer);
+                myMap.geoObjects.events.add('click', function (e) {
+                    // Получим ссылку на геообъект, по которому кликнул пользователь.
+                    var target = e.get('target');
+                    var code_doc_b = target.properties.get('code_doc_b'); 
+                    var partnumber = target.properties.get('partnumber'); 
+                    window.ReactNativeWebView.postMessage(JSON.stringify({code_doc_b, partnumber}))
+                });
+                myMap.setBounds(clusterer.getBounds(), {
+                    checkZoomRange: true,
+                    zoomMargin:64,
+                });
+
+            });
+        }
+    });
+    
+</script>
+</body>
+</html>
+
